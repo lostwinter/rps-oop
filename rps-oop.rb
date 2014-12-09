@@ -7,6 +7,7 @@ class Hand
   def initialize(value)
     @value = value
   end
+#__________________________________________
 
   def <=>(other_hand)
     if @value == other_hand.value
@@ -17,7 +18,7 @@ class Hand
       -1
     end  
   end
-
+#__________________________________________
   def display_winning_message
     case @value
     when 'Rock'
@@ -29,6 +30,7 @@ class Hand
     end
   end
 end
+#__________________________________________
 
 class Player
   attr_accessor :hand 
@@ -42,6 +44,7 @@ class Player
     "#{name} picks #{self.hand.value}."
   end
 end
+#__________________________________________
 
 class Human < Player
   
@@ -52,8 +55,10 @@ class Human < Player
     end until Game::CHOICES.include?(c)
 
     self.hand = Hand.new(c)
+    puts "You picked #{self.hand.value}"
   end
 end
+#__________________________________________
 
 class Computer < Player
 
@@ -63,6 +68,7 @@ class Computer < Player
 
   def throw_sign
     self.hand = Hand.new(Game::CHOICES.sample)
+    puts "Computer picked #{self.hand.value}"
   end
 end
 
@@ -77,6 +83,11 @@ class Game
     @computer = Computer.new("Farts")
   end
 
+  def welcome_message
+    puts "Hey! Time to play Rock Paper Scissors. Let's go!"
+    puts "==================================="
+  end
+
   def compare_hands
     if player.hand == computer.hand
       puts "It's a tie"
@@ -89,14 +100,20 @@ class Game
     end 
   end
 
+  def replay_message
+    puts "Want to play again? (Yes/No)"
+  end
+
   def play
-    #welcome_message
-    player.throw_sign
-    computer.throw_sign
-    compare_hands
-    #display_win
-    #replay?
+    welcome_message
+    begin 
+      player.throw_sign
+      computer.throw_sign
+      compare_hands
+      replay_message
+    end until gets.chomp.downcase.include?('no')
+    
   end
 end
 
-game = Game.new.play
+Game.new.play
